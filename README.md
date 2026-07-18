@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Image Classification Web App
 
 ## Project Overview
@@ -151,3 +152,6 @@ Response:
 - If `flask` is missing, install dependencies using `pip install -r requirements.txt`.
 - If MongoDB is not running, start it or update `MONGO_URL` in `config.py`.
 - If the model file is missing, ensure `artifacts/best_model.keras` exists and is accessible.
+=======
+# Multi-Class-Scene-Recognition-using-Using-CNN
+>>>>>>> 0cdacaa7860d2a931df24ec0df0126466a3f8829
