@@ -5,9 +5,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FLASK_PORT = int(os.environ.get("PORT", 8000))
 FLASK_HOST = os.environ.get("FLASK_HOST", "0.0.0.0")
 
-MONGO_URL = os.environ.get("MONGO_URL") or os.environ.get("MONGO_CLIENT")
-if not MONGO_URL:
-    MONGO_URL = "mongodb://localhost:27017/"
+
+
+MONGO_URL = os.environ.get("MONGO_URL") or os.environ.get("MONGO_CLIENT") or "mongodb+srv://Kaps:pkp%2428feb@docdb-cluster-20260701-0629.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
 
 db_name = os.environ.get("DB_NAME", "cnn_app")
 
