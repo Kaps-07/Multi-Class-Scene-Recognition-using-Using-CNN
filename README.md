@@ -1,43 +1,42 @@
-<<<<<<< HEAD
-# Image Classification Web App
+# CNN Image Insight
 
 ## Project Overview
 
-This repository contains a Flask-based image classification application. It uses a trained Keras model to classify uploaded images into one of six categories and stores prediction results in a MongoDB collection.
+CNN Image Insight is a Flask-based web application for image classification using a trained Keras convolutional neural network. Users can register, log in, upload an image, and view prediction results with probability details.
 
-## Features
+## Key Features
 
-- User registration and login using Flask endpoints
-- Password reset endpoint
-- Image upload prediction endpoint
-- Model inference using a saved Keras model (`artifacts/best_model.keras`)
-- MongoDB persistence for user data and prediction results
-- Response includes predicted class and the uploaded image encoded in base64
+- User registration and login workflow
+- Image upload prediction interface
+- CNN-based inference with a saved Keras model
+- Prediction persistence in MongoDB
+- Responsive interface with a polished web UI
 
 ## Tech Stack
 
-- Python 3
+- Python 3.11
 - Flask
-- Flask-JWT-Extended
 - TensorFlow / Keras
 - PyMongo
 - MongoDB
+- Jinja2 templates
 
 ## Repository Structure
 
-- `main.py` - Flask application entrypoint and route definitions
-- `config.py` - Application configuration values for Flask, MongoDB, and model paths
-- `src/utils.py` - Image preprocessing and classification helper
-- `src/database.py` - MongoDB data access helper
-- `artifacts/best_model.keras` - Saved Keras image classification model
-- `requirements.txt` - Python dependencies
-- `.gitignore` - Files and directories to ignore in Git
+- `main.py` - Flask application and route definitions
+- `config.py` - Application configuration for Flask, MongoDB, and model settings
+- `src/utils.py` - Image preprocessing and CNN inference utilities
+- `src/database.py` - MongoDB persistence helpers
+- `artifacts/best_model.keras` - Pre-trained Keras model for classification
+- `templates/` - Jinja2 HTML templates for register, login, and prediction pages
+- `static/style.css` - Application styling and layout
+- `requirements.txt` - Python package dependencies
 
 ## Prerequisites
 
-- Python 3.11 (or compatible Python 3.x)
-- MongoDB running locally or reachable by the configured connection string
-- Required Python packages installed
+- Python 3.11 or compatible Python 3.x
+- MongoDB accessible via the configured connection string
+- Required Python packages installed using `requirements.txt`
 
 ## Installation
 
@@ -54,37 +53,41 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-3. Ensure MongoDB is running.
+3. Make sure MongoDB is running and reachable.
 
-4. Confirm the model file exists at `artifacts/best_model.keras`.
+4. Verify the model file exists at `artifacts/best_model.keras`.
 
 ## Configuration
 
-The app configuration is stored in `config.py`:
+Update `config.py` as needed:
 
-- `FLASK_HOST` and `FLASK_PORT` for Flask server binding
+- `FLASK_HOST` and `FLASK_PORT` for web server binding
 - `MONGO_URL` for MongoDB connection
-- `db_name`, `user_collection_name`, `data_collection_name` for MongoDB collections
-- `model_path` for the saved Keras model
-- `IMG_HEIGHT`, `IMG_WIDTH` for image preprocessing dimensions
+- `db_name`, `user_collection_name`, and `data_collection_name`
+- `model_path`, `IMG_HEIGHT`, and `IMG_WIDTH`
 
-## Running the App
+## Running the Application
 
-Start the Flask app with:
+Start the app with:
 
 ```bash
 python main.py
 ```
 
-The API should be available at `http://127.0.0.1:5005` by default.
+Open the app in your browser at `http://127.0.0.1:5005` (or the configured host and port).
+
+## Application Flow
+
+1. Register a new account
+2. Log in with your credentials
+3. Upload an image for prediction
+4. View the predicted class and probability scores
 
 ## API Endpoints
 
 ### `POST /register`
 
-Register a new user.
-
-Form fields:
+Register a new user with:
 
 - `user_name`
 - `password`
@@ -92,66 +95,46 @@ Form fields:
 - `contact_number`
 - `dob`
 
-Response:
-
-- `status`: `success` or `exists`
-- `message`
-
 ### `POST /login`
 
-Login an existing user.
-
-Form fields:
+Log in with:
 
 - `user_name`
 - `password`
 
-Response:
-
-- `status`: `success` or `failure`
-- `message`
-- `access_token` on success
-
 ### `POST /forget_password`
 
-Reset a user password.
-
-Form fields:
+Reset password with:
 
 - `user_name`
 - `dob`
 - `new_password`
 
-Response:
-
-- `status`: `success` or `failure`
-- `message`
-
 ### `POST /predict`
 
-Upload an image for classification.
+Upload an image using form field:
 
-Form field:
+- `image`
 
-- `image` (file upload)
-
-Response:
-
-- `status`: `success`
-- `prediction`: predicted class label
-- `image`: base64-encoded uploaded image
+The app returns the predicted label and prediction details.
 
 ## Notes
 
-- The current application stores predictions using the helper in `src/database.py`.
-- The prediction endpoint returns the uploaded image as a base64 string in the response so it can be rendered in a client application.
-- If you want a frontend preview, decode the base64 string and display it as an image source.
+- Prediction entries are saved to MongoDB for later reference.
+- Uploaded images are encoded in base64 for rendering in the client.
+- The current UI is styled to match a CNN-based image analytics application.
 
 ## Troubleshooting
 
-- If `flask` is missing, install dependencies using `pip install -r requirements.txt`.
-- If MongoDB is not running, start it or update `MONGO_URL` in `config.py`.
-- If the model file is missing, ensure `artifacts/best_model.keras` exists and is accessible.
-=======
-# Multi-Class-Scene-Recognition-using-Using-CNN
->>>>>>> 0cdacaa7860d2a931df24ec0df0126466a3f8829
+- Install dependencies if packages are missing:
+
+```bash
+pip install -r requirements.txt
+```
+
+- Ensure MongoDB is running or update `MONGO_URL` in `config.py`.
+- Confirm `artifacts/best_model.keras` is present and accessible.
+
+## License
+
+This project is available for educational and demo purposes.
