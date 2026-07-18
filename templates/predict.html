@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+  <section class="page-grid">
+    <aside class="panel">
+      <div class="panel-badge">Step 3</div>
+      <h1>Enterprise image prediction</h1>
+      <p>Upload a business photo and get the predicted class, plus probability insights, in a polished UI.</p>
+      <ul class="panel-list">
+        <li>Industry-grade analytics</li>
+        <li>Image preview with details</li>
+        <li>Clean predictive reporting</li>
+      </ul>
+    </aside>
+
+    <section class="card form-panel">
+      <div class="section-header">
+        <span class="section-label">Prediction</span>
+        <h2>Upload image</h2>
+      </div>
+
+      <div class="info-banner">
+        <p>Upload a single image to receive a fast, business-ready classification with probability details and a clean visual summary.</p>
+      </div>
+
+      {% if result %}
+        <div class="result-card">
+          <div class="image-preview">
+            <img src="data:image/jpeg;base64,{{ result.image }}" alt="Uploaded Image">
+          </div>
+          <div class="prediction-details">
+            <div class="prediction-action">
+              <span class="section-label">Predicted Class</span>
+              <span class="status-chip">{{ result.prediction }}</span>
+            </div>
+
+            {% if result.probabilities %}
+              <ul class="probabilities">
+                {% for label, value in result.probabilities.items() %}
+                  <li><strong>{{ label }}</strong><span>{{ '%.2f' | format(value * 100) }}%</span></li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+
+      <form method="post" action="{{ url_for('predict_page') }}" enctype="multipart/form-data">
+        <div class="form-row"><label for="image">Choose image</label><input type="file" id="image" name="image" accept="image/*" required></div>
+        <button class="primary-button" type="submit">Predict</button>
+      </form>
+    </section>
+  </section>
+{% endblock %}

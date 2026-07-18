@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+  <section class="hero-card">
+    <div class="hero-copy">
+      <p class="eyebrow">Smart Image Classifier</p>
+      <h1 class="hero-title">Upload your photo and see its predicted category instantly.</h1>
+      <p>Use the Register and Login pages to access the prediction portal. Then visit Predict to classify images and view the results with confidence scores.</p>
+      <div class="hero-actions">
+        <a class="primary-button" href="{{ url_for('predict_page') }}">Start Predicting</a>
+        <a class="secondary-button" href="{{ url_for('register_page') }}">Create Account</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-surface">
+        <div class="stat-card">
+          <strong>6</strong>
+          <span>Categories supported</span>
+        </div>
+        <div class="stat-card">
+          <strong>1</strong>
+          <span>Model file used</span>
+        </div>
+        <div class="stat-card">
+          <strong>✔</strong>
+          <span>Live predictions</span>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

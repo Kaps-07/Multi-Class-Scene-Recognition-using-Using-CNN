@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title or 'CNN Image Insight' }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="site-brand">CNN Image Insight</div>
+        <nav class="nav-links">
+          <a href="{{ url_for('register_page') }}" class="{% if request.path == '/register' %}active{% endif %}">Register</a>
+          <a href="{{ url_for('login_page') }}" class="{% if request.path == '/login' %}active{% endif %}">Login</a>
+          <a href="{{ url_for('predict_page') }}" class="{% if request.path == '/predict' %}active{% endif %}">Predict</a>
+        </nav>
+      </header>
+
+      <main class="page-shell">
+        {% block content %}{% endblock %}
+      </main>
+
+      <footer>
+        <small>Built with Flask and Keras</small>
+      </footer>
+    </div>
+  </body>
+</html>

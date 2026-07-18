@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+  <section class="page-grid">
+    <aside class="panel">
+      <div class="panel-badge">Step 2</div>
+      <h1>Secure CNN sign-in</h1>
+      <p>Use your registered credentials to access the image classification dashboard.</p>
+      <ul class="panel-list">
+        <li>Encrypted credentials</li>
+        <li>One-click access</li>
+        <li>Fast authentication</li>
+      </ul>
+    </aside>
+
+    <section class="card form-panel">
+      <div class="section-header">
+        <span class="section-label">Login</span>
+        <h2>Sign in</h2>
+      </div>
+
+      {% if message %}
+        <div class="alert {{ 'success' if success else 'error' }}">{{ message }}</div>
+      {% endif %}
+
+      <form method="post" action="{{ url_for('login_page') }}">
+        <div class="form-row"><label for="user_name">Username</label><input type="text" id="user_name" name="user_name" required></div>
+        <div class="form-row"><label for="password">Password</label><input type="password" id="password" name="password" required></div>
+        <button class="primary-button" type="submit">Login</button>
+      </form>
+      {% if success %}
+        <div class="next-step">Logged in successfully. <a href="{{ url_for('predict_page') }}">Continue to Predict</a></div>
+      {% endif %}
+    </section>
+  </section>
+{% endblock %}

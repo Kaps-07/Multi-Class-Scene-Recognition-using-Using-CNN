@@ -20,42 +20,54 @@ mongo_client = pymongo.MongoClient(config.MONGO_URL)
 db = mongo_client[config.db_name]
 user_collection = db[config.user_collection_name]
 
-@app.route("/register", methods = ["POST"])
-def register():
-    user_data = request.form
-    user_name = user_data['user_name']
-    password = user_data['password']
-    email_id = user_data['email_id']
-    contact_number = user_data['contact_number']
-    dob = user_data['dob']
+@app.route("/register", methods=["GET", "POST"])
+def register_page():
+    message = None
+    success = False
 
-    response = user_collection.find_one({"email_id": email_id})
-    if not response:
-        user_collection.insert_one({
-            "user_name": user_name,
-            "password": password,
-            "email_id": email_id,
-            "contact_number": contact_number,
-            "dob": dob
+    if request.method == "POST":
+        user_data = request.form
+        user_name = user_data.get('user_name')
+        password = user_data.get('password')
+        email_id = user_data.get('email_id')
+        contact_number = user_data.get('contact_number')
+        dob = user_data.get('dob')
+
+        response = user_collection.find_one({"email_id": email_id})
+        if not response:
+            user_collection.insert_one({
+                "user_name": user_name,
+                "password": password,
+                "email_id": email_id,
+                "contact_number": contact_number,
+                "dob": dob
             })
-        return jsonify({"status": "success", "message":"User Registered Successfully"})
-    else:
-        return jsonify({"status": "exists", "message": "User Already Exists"})
+            message = "User Registered Successfully"
+            success = True
+        else:
+            message = "User Already Exists"
 
-@app.route("/login", methods = ["POST"])
-def login():
-    user_data = request.form
-    user_name = user_data['user_name']
-    password = user_data['password']
-    response = user_collection.find_one({"user_name": user_name, "password": password})
-    if response:
-        access_token = create_access_token(
-            identity=user_name,            
-            expires_delta=datetime.timedelta(minutes=1))
-        return jsonify({"status": "success","message": "Login Successful", 
-                        "access_token":access_token})
-    else:
-        return jsonify({"status": "failure", "message": "Invalid Credentials"})
+    return render_template("register.html", title="Register", message=message, success=success)
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login_page():
+    message = None
+    success = False
+
+    if request.method == "POST":
+        user_data = request.form
+        user_name = user_data.get('user_name')
+        password = user_data.get('password')
+        response = user_collection.find_one({"user_name": user_name, "password": password})
+        if response:
+            message = "Login Successful"
+            success = True
+        else:
+            message = "Invalid Credentials"
+
+    return render_template("login.html", title="Login", message=message, success=success)
+
 
 @app.route("/forget_password", methods=["POST"])
 def forget_passowrd():
@@ -66,26 +78,44 @@ def forget_passowrd():
     response = user_collection.find_one({"user_name": user_name, "dob": dob})
     if response:
         user_collection.update_one({"user_name": user_name}, {"$set": {"password": new_password}})
-        return jsonify({"status": "success","message": "Password updated successfully"
-                       })
+        return jsonify({"status": "success","message": "Password updated successfully"})
     else:
         return jsonify({"status": "failure", "message": "Invalid Credentials"})
 
 
-@app.route("/predict", methods=["POST"])
-def predict():
-    image_file = request.files["image"]
-    image_bytes = BytesIO(image_file.read())
-    prediction = image_recognition_obj.classify(image_bytes)
-    image_file.seek(0)
-    encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
+@app.route("/predict", methods=["GET", "POST"])
+def predict_page():
+    result = None
 
-    save_prediction(image_file, prediction)
+    if request.method == "POST":
+        image_file = request.files.get("image")
+        if image_file:
+            image_bytes = image_file.read()
+            image_stream = BytesIO(image_bytes)
+            predicted_class, probabilities = image_recognition_obj.classify(image_stream)
+            encoded_image = base64.b64encode(image_bytes).decode("utf-8")
 
-    return jsonify({
-        "status": "success",
-        "prediction": prediction,
-        "image": encoded_image
-    })
+            save_prediction(
+                image_bytes=image_bytes,
+                predicted_class=predicted_class,
+                probabilities=probabilities,
+                filename=image_file.filename,
+                content_type=image_file.content_type,
+            )
+
+            result = {
+                "prediction": predicted_class,
+                "probabilities": probabilities,
+                "image": encoded_image,
+            }
+
+    return render_template("predict.html", result=result)
+
+
+@app.route("/")
+def home():
+    return redirect(url_for("register_page"))
+
+
 if __name__ == "__main__":
-    app.run(host = config.FLASK_HOST, port = config.FLASK_PORT,debug = True)
+    app.run(host=config.FLASK_HOST, port=config.FLASK_PORT, debug=True, use_reloader=False)
