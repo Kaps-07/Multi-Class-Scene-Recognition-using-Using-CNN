@@ -63,20 +63,14 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_10AE944ED32540B19BB7136EFBD6EF0B }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7D8EEEDC705A46C9B08C056F1035F041 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_5FE6245572734462A4B7EC46D4966F77 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_578BB58984044BC588D5FCD5E00AB244 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A077A74E4F184BC8AF6865B2D66463BD }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8AC0BEF8C615485DA1DD9ABCFB5AF644 }}
 
-      # - name: 'Deploy to Azure Web App'
-      #   uses: azure/webapps-deploy@v3
-      #   id: deploy-to-webapp
-      #   with:
-      #     app-name: 'SceneSense'
-      #     slot-name: 'Production'
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
           app-name: 'SceneSense'
           slot-name: 'Production'
-          package: .
+          
